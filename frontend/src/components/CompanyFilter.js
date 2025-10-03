@@ -9,10 +9,11 @@ import {
   FormControl, 
   InputLabel, 
   Select, 
-  MenuItem, 
-  Button, 
-  Box 
+  MenuItem,
+  Box,
+  Chip
 } from '@mui/material';
+import FilterListIcon from '@mui/icons-material/FilterList';
 
 const CompanyFilter = () => {
   const dispatch = useDispatch();
@@ -30,16 +31,40 @@ const CompanyFilter = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-      <FormControl sx={{ minWidth: 200 }}>
-        <InputLabel id="company-filter-label">Filter by Company</InputLabel>
+    <Box sx={{ 
+      display: 'flex', 
+      flexDirection: { xs: 'column', sm: 'row' },
+      alignItems: { xs: 'stretch', sm: 'center' },
+      gap: 2, 
+      mb: 3,
+      p: 2,
+      bgcolor: 'background.paper',
+      borderRadius: 1,
+      boxShadow: 1
+    }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <FilterListIcon sx={{ color: 'primary.main' }} />
+        <span style={{ fontWeight: 500, color: '#2c3e50' }}>Filter</span>
+      </Box>
+      
+      <FormControl 
+        size="small" 
+        sx={{ 
+          minWidth: 200,
+          flex: 1
+        }}
+      >
+        <InputLabel id="company-filter-label">Select Company</InputLabel>
         <Select
           labelId="company-filter-label"
           id="company-filter"
           value={selectedCompany || ''}
           onChange={handleCompanyChange}
-          label="Filter by Company"
+          label="Select Company"
         >
+          <MenuItem value="">
+            <em>All Companies</em>
+          </MenuItem>
           {companies.map((company) => (
             <MenuItem key={company} value={company}>
               {company}
@@ -47,10 +72,22 @@ const CompanyFilter = () => {
           ))}
         </Select>
       </FormControl>
+      
       {selectedCompany && (
-        <Button variant="outlined" onClick={handleClearFilter}>
-          Clear Filter
-        </Button>
+        <Chip 
+          label={`Filtered by: ${selectedCompany}`} 
+          onDelete={handleClearFilter}
+          color="primary"
+          variant="outlined"
+          sx={{ 
+            height: 'auto',
+            '& .MuiChip-label': {
+              display: 'block',
+              whiteSpace: 'normal',
+              py: 1
+            }
+          }}
+        />
       )}
     </Box>
   );
